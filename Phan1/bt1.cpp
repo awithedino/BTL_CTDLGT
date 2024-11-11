@@ -6,16 +6,15 @@ private:
     string studentID;
     string fullName;
     int age;
-    float score;
+    double score;
 
 public:
-    Student() : studentID(""), fullName(""), age(0), score(0.0f) {}
+    Student() : studentID(""), fullName(""), age(0), score(0.0) {}
     ~Student() {}
 
     friend istream& operator>>(istream& is, Student& s) {
-        cin.ignore();
         cout << "Ma sinh vien: ";
-        getline(is, s.studentID);
+        getline(is >> ws, s.studentID); // `ws` to discard any whitespace before input
         cout << "Ho va ten: ";
         getline(is, s.fullName);
         cout << "Tuoi: ";
@@ -41,7 +40,7 @@ public:
         return fullName;
     }
 
-    float getScore() const {
+    double getScore() const {
         return score;
     }
 };
@@ -66,13 +65,16 @@ public:
     }
 
     void output() {
+        cout << "+---------------+----------------------+-----+--------+\n";
         cout << '|' << setw(15) << "Ma SV"
              << '|' << setw(20) << "Ho va ten"
              << '|' << setw(5) << "Tuoi"
              << '|' << setw(8) << "Diem" << "|\n";
+        cout << "+---------------+----------------------+-----+--------+\n";
         for (const auto& s : studentList) {
             cout << s << endl;
         }
+        cout << "+---------------+----------------------+-----+--------+\n";
     }
 
     void sortStudents() {
@@ -85,14 +87,14 @@ public:
             cout << "Danh sach sinh vien rong!\n";
             return;
         }
-        float max = studentList.front().getScore();
+        double max = studentList.front().getScore();
         for (const auto& s : studentList)
             if (max < s.getScore())
                 max = s.getScore();
         cout << "Sinh vien co diem cao nhat:\n";
         for (const auto& s : studentList)
             if (max == s.getScore())
-                cout << s;
+                cout << s << endl;
     }
 
     void minScore() {
@@ -100,14 +102,14 @@ public:
             cout << "Danh sach sinh vien rong!\n";
             return;
         }
-        float min = studentList.front().getScore();
+        double min = studentList.front().getScore();
         for (const auto& s : studentList)
             if (min > s.getScore())
                 min = s.getScore();
         cout << "Sinh vien co diem thap nhat:\n";
         for (const auto& s : studentList)
             if (min == s.getScore())
-                cout << s;
+                cout << s << endl;
     }
 
     bool studentExists(const string& name) {
@@ -122,7 +124,7 @@ public:
             cout << "Thong tin sinh vien:\n";
             for (const auto& s : studentList)
                 if (s.getName() == name)
-                    cout << s;
+                    cout << s << endl;
         } else {
             cout << "Khong tim thay sinh vien co ten: " << name << endl;
         }
@@ -154,7 +156,10 @@ private:
     StudentList mylist;
 
 public:
-    App() {
+    App() {}
+    ~App() {}
+
+    void showMenu() {
         cout << "MENU\n"
              << "1. Nhap danh sach sinh vien\n"
              << "2. Hien thi danh sach sinh vien\n"
@@ -166,10 +171,10 @@ public:
              << "8. Tim sinh vien co diem thap nhat\n"
              << "0. Thoat chuong trinh\n";
     }
-    ~App() {}
 
     void menu() {
         int choice;
+        showMenu(); 
         do {
             cout << "Nhap lua chon cua ban: ";
             cin >> choice;
@@ -216,14 +221,13 @@ public:
                 cout << "Lua chon khong hop le, vui long chon lai!" << endl;
                 break;
             }
-        } while (choice != 0);
+            if (choice != 0) showMenu();
+            } 
+        while (choice != 0);
     }
 };
 
-main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+int main() {
     App app;
     app.menu();
     return 0;

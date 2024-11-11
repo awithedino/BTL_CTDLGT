@@ -41,14 +41,13 @@ int main() {
             cin >> a;
         }
         B.push(a);
+        dao_nguoc(B);
     }
-
-    dao_nguoc(B);
 
     while (B.size()) {
         cout << B.front() << " ";
         B.pop();
     }
-
+    cout << endl;
     return 0;
 }
